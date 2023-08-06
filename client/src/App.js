@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 // Add the Bootstrap styles to the modal overlay
 import "bootstrap/dist/css/bootstrap.min.css";
+import { format } from "date-fns";
 
 // Modal.setAppElement("#root");
 
@@ -55,6 +56,7 @@ function App() {
         `http://localhost:8080/api/users/${selectedUsername}/tasks`
       );
       setTasks(response.data);
+      setUsername(selectedUsername);
     } catch (error) {
       console.error("Error fetching user tasks:", error);
     }
@@ -75,6 +77,7 @@ function App() {
       setTaskName("");
       setTaskDescription("");
       setFormDateTime(new Date());
+      setShowModal(true);
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -153,18 +156,6 @@ function App() {
         <div className="mt-4">
           <h2>Task List for : {username}</h2>
           <ul className="list-group">
-            {/* {tasks.map((task) => (
-              <li key={task.formNumber} className="list-group-item">
-                {task.taskName} - {task.taskDescription} - {task.formDateTime}
-                <button
-                  onClick={() => handleDeleteTask(task.formNumber)}
-                  className="btn btn-danger btn-sm ml-2"
-                >
-                  Delete
-                </button>
-              </li>
-            ))} */}
-
             {tasks.map((task, index) => (
               <li
                 key={`${task.formNumber}_${index}`}
@@ -174,7 +165,7 @@ function App() {
                 <div className="p-3 d-flex justify-content-around">
                   <h5>{task.taskName}</h5>
                   <h5>{task.taskDescription}</h5>
-                  <h5>{task.formDateTime}</h5>
+                  <h5>{format(new Date(), "MMMM do yyyy, p")}</h5>
                 </div>
                 <button
                   onClick={() => handleDeleteTask(task.formNumber)}
